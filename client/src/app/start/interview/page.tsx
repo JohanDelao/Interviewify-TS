@@ -1,17 +1,21 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import GetQuestions from '@/app/utils/get-questions';
+import GetQuestions from '../../utils/get-questions';
 import { useRouter, useSearchParams } from 'next/navigation';
-import getProfessionType from '@/app/utils/get-profession-type';
+import getProfessionType from '../../utils/get-profession-type';
 import Card from 'antd/es/card/Card';
 import { AudioOutlined, AudioMutedOutlined } from '@ant-design/icons';
 import { Button, Progress, Modal } from 'antd';
 import { ReactMic } from 'react-mic';
+import LoadingSubmission from '../../components/loadingSubmission';
 import axios from 'axios';
 
 export default function Interview() {
   const params = useSearchParams();
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   const profession = getProfessionType(params.get('profession'));
   const numQs = parseInt(
     params.get('numberQs') ? String(params.get('numberQs')) : '0',
@@ -50,7 +54,6 @@ export default function Interview() {
           withCredentials: true,
         },
       );
-      console.log('Success', evaluations, resp);
       router.push('/start/feedback');
     };
     if (evaluations.length == numQs) saveToMongo();
@@ -61,6 +64,12 @@ export default function Interview() {
     const formData = new FormData();
 
     let currIdx = blobs.length - 1;
+
+    // means this is the last question, for good UI we want to execute the loading to hide the delay of this response evaluation and saving to mongodb
+    if(blobs.length === numQs){
+      setLoading(true);
+    }
+
     formData.append('question', questions[currIdx] as string);
     formData.append('profession', profession as string);
     formData.append('audio', blobs[currIdx]);
@@ -118,10 +127,6 @@ export default function Interview() {
   };
 
   const [muted, setMuted] = useState<boolean>(false);
-
-  function handleData(recordedBlob: any) {
-    console.log('chunk of real-time data is: ', recordedBlob);
-  }
 
   useEffect(() => {
     const questions = GetQuestions(profession ? profession : undefined, numQs);
@@ -192,7 +197,7 @@ export default function Interview() {
     restartQuestion();
   };
 
-  return (
+  return loading ? <LoadingSubmission /> : (
     <div className="lg:max-w-screen-lg lg:mx-auto lg:justify-normal flex flex-col w-full mt-8 gap-16 lg:gap-36 h-full justify-center">
       <div className="flex">
         <div className="w-full flex flex-col gap-2">

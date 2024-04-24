@@ -165,7 +165,7 @@ export default function RegularLayout({
             style={{ background: 'white' }}
           >
             <div className="h-full bg-[#1677ff] flex justify-center items-center">
-              <div className='h-[95%] w-[95%] bg-white rounded-xl drop-shadow'>
+              <div className='h-[95%] w-[95%] bg-white rounded-xl drop-shadow overflow-y-auto'>
                 <Suspense fallback={<Loading />}>{children}</Suspense>
               </div>
             </div>
