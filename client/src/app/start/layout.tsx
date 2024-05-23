@@ -71,12 +71,11 @@ export default function RegularLayout({
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    axios
+  const handleLogout = async () => {
+    await axios
       .get('http://localhost:4000/auth/logout')
-      .then((res) => console.log(res))
+      .then((res) => router.push('/welcome'))
       .catch((err) => console.log(err));
-    router.push('/welcome');
   };
 
   useEffect(() => {

@@ -7,7 +7,16 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      urbanist: ["Urbanist", "sans"],
+      redHatText: ["Red Hat Text", "sans"],
+    },
     extend: {
+      colors: {
+        primary: "rgb(var(--primary-color) / <alpha-value>)",
+        secondary: "rgb(var(--secondary-color) / <alpha-value>)",
+        accent: "rgb(var(--accent-color) / <alpha-value>)"
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

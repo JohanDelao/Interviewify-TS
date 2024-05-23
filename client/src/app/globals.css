@@ -1,12 +1,19 @@
-/* styles/tailwind.css */
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import './styles/loading.css';
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 :root {
+     /* Primary is used for the background color (lighter color) */
+     --primary-color: 248 248 255;
+     /* Secondary is used for components that require attention (buttons, sections, etc) */
+     --secondary-color: 55 114 255;
+     /* Accent is primarily for text */
+     --accent-color: 18 18 24; 
+
     --scrollbar-width: 0px;
     --angleNormal: -3deg;
 
