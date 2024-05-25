@@ -4,25 +4,31 @@ import { MenuProps } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space } from 'antd';
 
-const ScheduleDropdown = ({ profession, setProfession }) => {
+type ScheduleDropdownProps = {
+  profession: ProfessionType,
+  setProfession: React.Dispatch<React.SetStateAction<ProfessionType>>
+}
+
+const ScheduleDropdown = ({ profession, setProfession } : ScheduleDropdownProps) => {
   const handleMenuClick: MenuProps['onClick'] = (e) => {
+    // TO DO: Fix type error here
     setProfession(e.key);
   };
 
   const items: MenuProps['items'] = [
     {
       label: ProfessionType.SOFTWARE_ENGINEER,
-      key: 'Software Engineer',
+      key: ProfessionType.SOFTWARE_ENGINEER,
       icon: <UserOutlined />,
     },
     {
       label: ProfessionType.DATA_SCIENTIST,
-      key: 'Data Scientist',
+      key: ProfessionType.DATA_SCIENTIST,
       icon: <UserOutlined />,
     },
     {
       label: ProfessionType.PRODUCT_MANAGER,
-      key: 'Product Manager',
+      key: ProfessionType.PRODUCT_MANAGER,
       icon: <UserOutlined />,
     },
   ];

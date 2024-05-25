@@ -5,6 +5,12 @@ export interface User {
   _id: string;
 }
 
+export interface Interview {
+  questionCount: number;
+  profession: ProfessionType;
+  questions: string[];
+}
+
 export enum ProfessionType {
   ALL = 'all',
   SOFTWARE_ENGINEER = 'Software Engineer',

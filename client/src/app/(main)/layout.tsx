@@ -4,6 +4,7 @@ import SideNav from './components/sidenav'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { LoadingOutlined } from '@ant-design/icons';
+import ThemeContextProvider from '../contexts/interview-context';
 
 export default function MainLayout({
   children,
@@ -43,7 +44,9 @@ export default function MainLayout({
     <div className='w-full h-screen bg-primary flex'>
       <SideNav />
       <div className='w-[calc(100vw-14rem)] h-full'>
-        {children}
+        <ThemeContextProvider>
+          {children}
+        </ThemeContextProvider>
       </div>
     </div>
   );
