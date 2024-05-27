@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { User } from '@/app/interfaces';
+import { User } from '../../interfaces';
 import ScheduleInterview from '../components/scheduleInterview';
 
 const Dashboard = () => {
@@ -22,7 +22,6 @@ const Dashboard = () => {
               },
             );
             if(res.data.user) {
-              console.log(res.data.user);
               setUser(res.data.user)
             } else {
                 // TO DO: error handling for user

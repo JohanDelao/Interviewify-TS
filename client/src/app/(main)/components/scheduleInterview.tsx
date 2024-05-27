@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfessionDropdown from "../components/professionDropdown";
 import NumberQuestions from "../components/numberQuestions";
-import { useInterviewContext } from "@/app/contexts/interview-context";
-import { ProfessionType } from "@/app/interfaces";
-import GetQuestions from "@/app/utils/get-questions";
+import { useInterviewContext } from "../../contexts/interview-context";
+import { ProfessionType } from "../../interfaces";
+import GetQuestions from "../../utils/get-questions";
 
 const ScheduleInterview = () => {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
