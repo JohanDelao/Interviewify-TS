@@ -1,25 +1,81 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInterviewContext } from '../../../contexts/interview-context';
 import InterviewPrompt from '../components/InterviewPrompt';
 import Timer from '../components/timer';
 import QuestionBars from '../components/questionBars';
 import MainInterview from '../components/mainInterview';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const Interview = () => {
   const { interview } = useInterviewContext();
+  const router = useRouter();
 
   if (!interview) {
     return <div>Error with getting interview</div>;
   }
 
   const [prompt, setPrompt] = useState(true);
-
+ 
+  // States for Question  
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [started, setStarted] = useState<boolean>(false);
-  const [time, setTime] = useState<number>(30);
+
+  // States for timer
+  const [time, setTime] = useState<number>(30); 
   const [intervalID, setIntervalID] = useState<NodeJS.Timeout | null>(null);
+
+  // States for evaluation and audio
   const [blobs, setBlobs] = useState<any[]>([]);
+  const [evaluations, setEvaluations] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saveToMongo = async () => {
+      const data = {
+        evaluations: evaluations,
+        position: interview.profession,
+      };
+      const resp = await axios.post(
+        'http://localhost:4000/mongo/save-interview',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        },
+      );
+      console.log('Success', evaluations, resp);
+    //   router.push('/start/feedback');
+    };
+    if (evaluations.length == interview.questionCount) saveToMongo();
+  }, [evaluations]);
+
+  // TODO: Need to discuss ways to handle sending request -> redirect to new page -> receiving info
+  const evaluate = async () => {
+    const formData = new FormData();
+
+    let currIdx = blobs.length - 1;
+    formData.append('question', interview.questions[currIdx] as string);
+    formData.append('profession', interview.profession as string);
+    formData.append('audio', blobs[currIdx]);
+    const resp = await axios.post(
+      'http://localhost:4000/gpt/evaluate',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    setEvaluations((prevEvals) => [...prevEvals, resp.data]);
+  };
+
+   // when blobs gets updated, evalaute new blob
+   useEffect(() => {
+    if (blobs.length > 0) evaluate();
+  }, [blobs]);
 
   const startResponse = () => {
     setStarted(true);
