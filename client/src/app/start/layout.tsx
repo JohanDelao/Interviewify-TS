@@ -4,9 +4,6 @@ import '../globals.css';
 import React, { useEffect, useState } from 'react';
 import { Layout, Menu, MenuProps, Modal } from 'antd';
 const { Footer, Sider } = Layout;
-import { Suspense } from 'react';
-import Loading from './loading';
-import Image from 'next/image';
 import {
   ClockCircleOutlined,
   UserOutlined,
@@ -15,9 +12,7 @@ import {
 } from '@ant-design/icons';
 import axios, { AxiosError } from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
-import CustomFooter from '../components/footer';
 import { User } from '../interfaces';
-import Logo from '../../../public/images/LogoV2.png';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -71,12 +66,11 @@ export default function RegularLayout({
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    axios
+  const handleLogout = async () => {
+    await axios
       .get('http://localhost:4000/auth/logout')
-      .then((res) => console.log(res))
+      .then((res) => router.push('/welcome'))
       .catch((err) => console.log(err));
-    router.push('/welcome');
   };
 
   useEffect(() => {
@@ -113,7 +107,7 @@ export default function RegularLayout({
   ];
 
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       <div>
         <Layout className="max-h-screen overflow-hidden" hasSider>
           {/* TO DO: Have Sider animation where when it loads up have it slide up from the side */}
@@ -133,12 +127,6 @@ export default function RegularLayout({
                 }
               }}
             >
-              <Image
-                src={Logo}
-                height={30}
-                width={30}
-                alt="logo of interviewify"
-              />
               <p className="text-xl font-bold text-white">Interviewify</p>
             </div>
             <Menu
@@ -166,7 +154,7 @@ export default function RegularLayout({
           >
             <div className="h-full bg-[#1677ff] flex justify-center items-center">
               <div className='h-[95%] w-[95%] bg-white rounded-xl drop-shadow'>
-                <Suspense fallback={<Loading />}>{children}</Suspense>
+                {children}
               </div>
             </div>
           </Layout>
@@ -182,6 +170,6 @@ export default function RegularLayout({
       >
         <p>Your progress will not be saved!</p>
       </Modal>
-    </Suspense>
+      </>
   );
 }

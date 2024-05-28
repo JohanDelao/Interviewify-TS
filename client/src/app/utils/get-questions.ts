@@ -7,16 +7,17 @@ export default function GetQuestions(
 ): string[] {
   const res: string[] = [];
   if (profession && numberQs) {
-    for (let i = 0; i < numberQs; i++) {
+    while (res.length < numberQs) {
       let randomIndex = Math.floor(Math.random() * questionBank.length);
+      let question = questionBank[randomIndex][0];
+      let questionProfession = questionBank[randomIndex][1];
+
       if (
-        questionBank[randomIndex][1] !== profession ||
-        questionBank[randomIndex][1] !== ProfessionType.ALL ||
-        res.includes(questionBank[randomIndex][0])
+        (questionProfession === profession || questionProfession === ProfessionType.ALL) &&
+        !res.includes(question)
       ) {
-        randomIndex = Math.floor(Math.random() * questionBank.length);
+        res.push(question);
       }
-      res.push(questionBank[randomIndex][0]);
     }
   }
   return res;
